@@ -14,7 +14,7 @@ namespace Chat.Application.Services.User;
 
 public interface IUserInfoService
 {
-    Task<UserInfo> WXLogin(string code, string name, string headPortrait);
+    Task<UserInfo> WXLogin(string? code, string? name, string? headPortrait);
 }
 public class UserInfoService : BaseService<UserInfo>, IUserInfoService
 {
@@ -28,7 +28,7 @@ public class UserInfoService : BaseService<UserInfo>, IUserInfoService
         _mapper = mapper;
     }
 
-    public async Task<UserInfo> WXLogin(string code, string name, string headPortrait)
+    public async Task<UserInfo> WXLogin(string? code, string? name, string? headPortrait)
     {
         var appid = AppSettings.App("appid");
         var secret = AppSettings.App("secret");

@@ -15,11 +15,10 @@ public class JwtService : IJwtService
         TokenOptions = options.Value;
     }
 
-    public Task<string> CreateTokenAsync(string username)
+    public Task<string> CreateTokenAsync(string userId)
     {
         // 添加一些需要的键值对
-        Claim[] claims = new[] { new Claim("user", username) };
-
+        Claim[] claims = new[] { new Claim("user", userId) };
         var keyBytes = Encoding.UTF8.GetBytes(TokenOptions.SecretKey!);
         var creds = new SigningCredentials(new SymmetricSecurityKey(keyBytes),
                                         SecurityAlgorithms.HmacSha256);
@@ -30,8 +29,10 @@ public class JwtService : IJwtService
             claims: claims,// payload
             expires: DateTime.Now.AddMinutes(TokenOptions.ExpireMinutes),// 过期时间
             signingCredentials: creds);// 令牌
-
         var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         return Task.FromResult(token);
     }
+
+    public async Task<string> CreateTokenAsync(Guid userId)=>
+        await CreateTokenAsync(userId.ToString());
 }

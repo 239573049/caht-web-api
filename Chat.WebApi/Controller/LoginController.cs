@@ -1,19 +1,25 @@
-﻿using Chat.WebCore.Base;
+﻿using Chat.Application.Services.User;
+using Chat.WebCore.Base;
 using Chat.WebCore.JWT;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chat.WebApi.Controller;
-
+/// <summary>
+/// 登录模块
+/// </summary>
 public class LoginController : WebApiController
 {
     private readonly IJwtService _jwtService;
+    private readonly IUserInfoService _userInfoService;
     private readonly IPrincipalAccessor _principalAccessor;
     public LoginController(
+        IUserInfoService userInfoService,
         IJwtService jwtService,
         IPrincipalAccessor principalAccessor
         )
     {
         _jwtService=jwtService;
+        _userInfoService = userInfoService;
         _principalAccessor = principalAccessor;
     }
     /// <summary>
@@ -22,9 +28,9 @@ public class LoginController : WebApiController
     /// <param name="code"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<IActionResult> WXLogin(string code)
+    public async Task<IActionResult> WXLogin(string? code, string? name, string? headPortrait)
     {
-        var token=await _jwtService.CreateTokenAsync(code);
-        return new OkObjectResult(new { token });
+        var user =await _userInfoService.WXLogin(code, name,headPortrait);
+        return new OkObjectResult(new { token= await _jwtService.CreateTokenAsync(user.Id), user });
     }
 }
