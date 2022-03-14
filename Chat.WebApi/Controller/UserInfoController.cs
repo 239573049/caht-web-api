@@ -26,4 +26,5 @@ public class UserInfoController : WebApiController
     {
         return await _userInfoService.GetUserInfo(_principalAccessor.UserId());
     }
+
 }
