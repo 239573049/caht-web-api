@@ -32,7 +32,7 @@ public class GlobalExceptionsFilter:ExceptionFilterAttribute
             var ex = context.Exception as BusinessLogicException;
             var response = new 
             {
-                Code = ex?.Code??500,
+                code = ex?.Code??500,
                 message = ex?.Message??context.Exception.Message
             };
             _loggerHelper.Error(context.HttpContext.Request.Path, context.Exception, context.HttpContext.Request.Body);

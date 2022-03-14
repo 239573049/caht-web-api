@@ -15,8 +15,26 @@ namespace Chat.Application.Services.User;
 
 public interface IUserInfoService
 {
+    /// <summary>
+    /// 微信登录接口
+    /// </summary>
+    /// <param name="code"></param>
+    /// <param name="name"></param>
+    /// <param name="headPortrait"></param>
+    /// <returns></returns>
     Task<UserInfoDto> WXLogin(string? code, string? name, string? headPortrait);
+    /// <summary>
+    /// 获取用户信息
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     Task<UserInfoDto> GetUserInfo(Guid id);
+    /// <summary>
+    /// 编辑用户信息
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
+    Task<UserInfoDto> UpdateUserInfo(UserInfoDto user);
 }
 public class UserInfoService : BaseService<UserInfo>, IUserInfoService
 {
@@ -35,6 +53,20 @@ public class UserInfoService : BaseService<UserInfo>, IUserInfoService
         var data=await currentRepository.FindAll(a=>a.Id==id)
                 .FirstOrDefaultAsync();
         if (data == null) throw new BusinessLogicException("用户不存在或者已经被删除");
+        return _mapper.Map<UserInfoDto>(data);
+    }
+
+    public async Task<UserInfoDto> UpdateUserInfo(UserInfoDto user)
+    {
+        var data=await currentRepository.FindAll(a=>a.Id==user.Id).FirstOrDefaultAsync();
+        if (data == null) throw new BusinessLogicException("用户不存在或者已经被删除");
+        user.Statue=data.Statue;
+        user.AccountNumber=data.AccountNumber;
+        user.Password=data.Password;
+        user.WXOpenId=data.WXOpenId;
+        _mapper.Map(user,data);
+        currentRepository.Update(data);
+        await unitOfWork.SaveChangesAsync();
         return _mapper.Map<UserInfoDto>(data);
     }
 

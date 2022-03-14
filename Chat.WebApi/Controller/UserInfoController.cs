@@ -18,7 +18,7 @@ public class UserInfoController : WebApiController
         _principalAccessor = principalAccessor;
     }
     /// <summary>
-    /// 获取账号学习
+    /// 获取账号信息
     /// </summary>
     /// <returns></returns>
     [HttpGet]
@@ -26,5 +26,14 @@ public class UserInfoController : WebApiController
     {
         return await _userInfoService.GetUserInfo(_principalAccessor.UserId());
     }
-
+    /// <summary>
+    /// 编辑账号信息
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
+    [HttpPut]
+    public async Task<UserInfoDto> UpdateUserInfo(UserInfoDto user)
+    {
+        return await _userInfoService.UpdateUserInfo(user);
+    }
 }
