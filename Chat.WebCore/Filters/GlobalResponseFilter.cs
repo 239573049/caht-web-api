@@ -1,0 +1,88 @@
+﻿using Chat.WebCore.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Diagnostics;
+
+namespace Chat.WebCore.Filters;
+
+
+/// <summary>
+/// 全局返回拦截
+/// </summary>
+public class GlobalResponseFilter : ActionFilterAttribute
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="context"></param>
+    [DebuggerStepThrough]
+    public override void OnActionExecuted(ActionExecutedContext context)
+    {
+        if (context.Result != null)
+        {
+            if (context.Result is ObjectResult)
+            {
+                ObjectResult? objectResult = context.Result as ObjectResult;
+                if (objectResult?.GetType().Name == "BadRequestObjectResult")
+                {
+                    context.Result =new JsonResult(new
+                    {
+                        StatusCode = objectResult.StatusCode,
+                        Data = new
+                        {
+
+                        },
+                        Message = objectResult.Value
+                    });
+                }
+                else if (objectResult?.Value?.GetType().Name == "ModelStateResult")
+                {
+                    var modelStateResult = objectResult.Value as ModelStateResult;
+                    context.Result = new JsonResult(new
+                    {
+                        StatusCode = modelStateResult?.Code,
+                        Data = new
+                        {
+
+                        },
+                        Message = modelStateResult?.Message
+                    });
+                }
+                else
+                {
+                    context.Result = new JsonResult(new
+                    {
+                        StatusCode = 200,
+                        Data = objectResult?.Value
+                    });
+                }
+            }
+            else if (context.Result is EmptyResult)
+            {
+                context.Result = new JsonResult(new
+                {
+                    StatusCode = 200,
+                    Data = new
+                    {
+
+                    }
+                });
+            }
+            else if (context.Result is ModelStateResult)
+            {
+                ModelStateResult? modelStateResult2 = context.Result as ModelStateResult;
+                context.Result = new JsonResult(new
+                {
+                    modelStateResult2?.Code,
+                    Data = new
+                    {
+
+                    },
+                    modelStateResult2?.Message
+                });
+            }
+        }
+
+        base.OnActionExecuted(context);
+    }
+}
