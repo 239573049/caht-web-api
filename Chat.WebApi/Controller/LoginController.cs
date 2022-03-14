@@ -31,6 +31,7 @@ public class LoginController : WebApiController
     public async Task<IActionResult> WXLogin(string? code, string? name, string? headPortrait)
     {
         var user =await _userInfoService.WXLogin(code, name,headPortrait);
-        return new OkObjectResult(new { token= await _jwtService.CreateTokenAsync(user.Id), user });
+        var token = await _jwtService.CreateTokenAsync(user.Id);//jwt令牌生成
+        return new OkObjectResult(new { token, user });
     }
 }
