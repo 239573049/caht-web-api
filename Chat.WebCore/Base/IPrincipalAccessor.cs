@@ -24,4 +24,5 @@ public interface IPrincipalAccessor
     string? GetTenantId();
 
     List<string> GetUserInfoFromToken(string ClaimType);
+    Guid UserId();
 }

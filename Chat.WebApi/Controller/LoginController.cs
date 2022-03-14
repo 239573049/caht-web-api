@@ -9,12 +9,10 @@ namespace Chat.WebApi.Controller;
 /// </summary>
 public class LoginController : WebApiController
 {
-    private readonly IDemoService _demoService;
     private readonly IJwtService _jwtService;
     private readonly IUserInfoService _userInfoService;
     private readonly IPrincipalAccessor _principalAccessor;
     public LoginController(
-        IDemoService demoService,
         IUserInfoService userinfoService,
         IJwtService jwtService,
         IPrincipalAccessor principalAccessor

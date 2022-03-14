@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Chat.Application.Dto.User;
 using Chat.Application.Dto.WX;
 using Chat.Core.DbEnum;
 using Chat.Core.Entities.User;
@@ -8,12 +9,14 @@ using Chat.Infrastructure.Helper;
 using Chat.Repository;
 using Chat.Repository.Repositorys;
 using Management.Repository.Core;
+using Microsoft.EntityFrameworkCore;
 using XHHttpUtil;
 namespace Chat.Application.Services.User;
 
 public interface IUserInfoService
 {
-    Task<UserInfo> WXLogin(string? code, string? name, string? headPortrait);
+    Task<UserInfoDto> WXLogin(string? code, string? name, string? headPortrait);
+    Task<UserInfoDto> GetUserInfo(Guid id);
 }
 public class UserInfoService : BaseService<UserInfo>, IUserInfoService
 {
@@ -27,7 +30,15 @@ public class UserInfoService : BaseService<UserInfo>, IUserInfoService
         _mapper = mapper;
     }
 
-    public async Task<UserInfo> WXLogin(string? code, string? name, string? headPortrait)
+    public async Task<UserInfoDto> GetUserInfo(Guid id)
+    {
+        var data=await currentRepository.FindAll(a=>a.Id==id)
+                .FirstOrDefaultAsync();
+        if (data == null) throw new BusinessLogicException("用户不存在或者已经被删除");
+        return _mapper.Map<UserInfoDto>(data);
+    }
+
+    public async Task<UserInfoDto> WXLogin(string? code, string? name, string? headPortrait)
     {
         var appid = AppSettings.App("appid");
         var secret = AppSettings.App("secret");
@@ -44,10 +55,11 @@ public class UserInfoService : BaseService<UserInfo>, IUserInfoService
                 Statue = StatueEnum.Enable,
                 AccountNumber = data.Openid,
                 Sex = SexEnum.None,
-                Password = StringHelper.GetString(6).DESEncrypt(),
+                Password = "Aa123456".DESEncrypt(),
             };
             userInfo=await currentRepository.AddAsync(userInfo);
+            await unitOfWork.SaveChangesAsync();
         }
-        return _mapper.Map<UserInfo>(userInfo);
+        return _mapper.Map<UserInfoDto>(userInfo);
     }
 }

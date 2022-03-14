@@ -1,4 +1,5 @@
-﻿using Chat.WebCore.JWT;
+﻿using Chat.Infrastructure.Exceptions;
+using Chat.WebCore.JWT;
 using Microsoft.AspNetCore.Http;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -38,5 +39,12 @@ public class PrincipalAccessor : IPrincipalAccessor
     {
         HttpContext httpContext = _contextAccessor.HttpContext;
         return httpContext != null && httpContext.Request.Headers.ContainsKey(this.X_TENANT_ID) ? ((IEnumerable<string>)(object)httpContext.Request.Headers[this.X_TENANT_ID]).FirstOrDefault() : null;
+    }
+
+    public Guid UserId()
+    {
+        var user = ID;
+        if (user == Guid.Empty) throw new BusinessLogicException(401, "账号未授权");
+        return user;
     }
 }
