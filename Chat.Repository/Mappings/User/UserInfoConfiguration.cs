@@ -1,4 +1,5 @@
 ﻿using Chat.Core.Entities.User;
+using Chat.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

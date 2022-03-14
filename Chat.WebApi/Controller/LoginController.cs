@@ -9,17 +9,19 @@ namespace Chat.WebApi.Controller;
 /// </summary>
 public class LoginController : WebApiController
 {
+    private readonly IDemoService _demoService;
     private readonly IJwtService _jwtService;
     private readonly IUserInfoService _userInfoService;
     private readonly IPrincipalAccessor _principalAccessor;
     public LoginController(
-        IUserInfoService userInfoService,
+        IDemoService demoService,
+        IUserInfoService userinfoService,
         IJwtService jwtService,
         IPrincipalAccessor principalAccessor
         )
     {
         _jwtService=jwtService;
-        _userInfoService = userInfoService;
+        _userInfoService = userinfoService;
         _principalAccessor = principalAccessor;
     }
     /// <summary>
@@ -30,7 +32,7 @@ public class LoginController : WebApiController
     [HttpPost]
     public async Task<IActionResult> WXLogin(string? code, string? name, string? headPortrait)
     {
-        var user =await _userInfoService.WXLogin(code, name,headPortrait);
+        var user = await _userInfoService.WXLogin(code, name, headPortrait);
         var token = await _jwtService.CreateTokenAsync(user.Id);//jwt令牌生成
         return new OkObjectResult(new { token, user });
     }

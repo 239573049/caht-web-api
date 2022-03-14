@@ -6,9 +6,8 @@ using Chat.Infrastructure.Exceptions;
 using Chat.Infrastructure.Extension;
 using Chat.Infrastructure.Helper;
 using Chat.Repository;
-using Chat.Repository.Core;
 using Chat.Repository.Repositorys;
-using Newtonsoft.Json;
+using Management.Repository.Core;
 using XHHttpUtil;
 namespace Chat.Application.Services.User;
 
@@ -19,11 +18,11 @@ public interface IUserInfoService
 public class UserInfoService : BaseService<UserInfo>, IUserInfoService
 {
     private readonly IMapper _mapper;
+
     public UserInfoService(
         IMapper mapper,
         IUnitOfWork<MasterDbContext> unitOfWork, 
-        IMasterDbRepositoryBase<UserInfo> currentRepository
-        ) : base(unitOfWork, currentRepository)
+        IMasterDbRepositoryBase<UserInfo> currentRepository) : base(unitOfWork, currentRepository)
     {
         _mapper = mapper;
     }

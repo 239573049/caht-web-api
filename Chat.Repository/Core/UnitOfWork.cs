@@ -3,7 +3,7 @@ using Chat.WebCore.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Chat.Repository.Core;
+namespace Management.Repository.Core;
 
 public class UnitOfWork<TDbContext> : IUnitOfWork<TDbContext> where TDbContext : DbContext
 {
@@ -13,7 +13,7 @@ public class UnitOfWork<TDbContext> : IUnitOfWork<TDbContext> where TDbContext :
     public UnitOfWork(TDbContext dbContext, IPrincipalAccessor principalAccessor)
     {
         _dbContext = dbContext
-                     ?? throw new ArgumentNullException($"db context nameof{nameof(dbContext)} is null");
+            ?? throw new ArgumentNullException($"db context nameof{nameof(dbContext)} is null");
         _principalAccessor = principalAccessor;
     }
 
@@ -93,7 +93,7 @@ public class UnitOfWork<TDbContext> : IUnitOfWork<TDbContext> where TDbContext :
         }
     }
 
-    private void SetModification(object entityObj)
+    private  void SetModification(object entityObj)
     {
         if (entityObj is not IHaveModification)
         {
@@ -109,7 +109,7 @@ public class UnitOfWork<TDbContext> : IUnitOfWork<TDbContext> where TDbContext :
     }
 
 
-    private void SetDelete(EntityEntry entry)
+    private  void SetDelete(EntityEntry entry)
     {
         var entityObj = entry.Entity;
         if (entityObj is not IHaveDeletion)

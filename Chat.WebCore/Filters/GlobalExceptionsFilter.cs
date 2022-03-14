@@ -24,7 +24,7 @@ public class GlobalExceptionsFilter:ExceptionFilterAttribute
     /// 
     /// </summary>
     /// <param name="context"></param>
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     public override void OnException(ExceptionContext context)
     {
         if (context.ExceptionHandled == false)

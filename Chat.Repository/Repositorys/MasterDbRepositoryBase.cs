@@ -2,6 +2,7 @@
 using Chat.Repository.Core;
 
 namespace Chat.Repository.Repositorys;
+
 public class MasterDbRepositoryBase<TEntity> : EfRepository<MasterDbContext, TEntity, Guid>, IMasterDbRepositoryBase<TEntity, Guid> where TEntity : Entity<Guid>
 {
     public MasterDbRepositoryBase(MasterDbContext dbContext)

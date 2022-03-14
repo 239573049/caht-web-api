@@ -7,6 +7,7 @@ using Chat.Repository.Repositorys;
 using Chat.WebCore.Base;
 using Chat.WebCore.Filters;
 using Chat.WebCore.JWT;
+using Management.Repository.Core;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,6 @@ using Serilog.Events;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Reflection;
 using System.Text;
-
 var basePath = AppDomain.CurrentDomain.BaseDirectory;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,15 +30,37 @@ Log.Logger = new LoggerConfiguration()
             .CreateLogger();
 builder.Services.AddSingleton(Log.Logger);
 #endregion
+var service = builder.Services;
+service.AddSingleton(new AppSettings(builder.Environment.ContentRootPath));
+//service.AddDbContext<MasterDbContext>(option => option.UseMySql(AppSettings.App("Database:MYSQL"), new MySqlServerVersion(new Version(6, 0, 1))));
+service.AddDbContext<MasterDbContext>(option => option.UseSqlServer(AppSettings.App("Database:MSSQL")));
+service.AddTransient(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
+service.AddTransient(typeof(IMasterDbRepositoryBase<,>), typeof(MasterDbRepositoryBase<,>));
+service.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+service.AddSingleton<IPrincipalAccessor, PrincipalAccessor>();
+service.AddEndpointsApiExplorer();
+service.AddAutoMapper(new List<Assembly> { Assembly.Load("Chat.Application") });
+
+service.AddCors(delegate (CorsOptions options)
+{
+    options.AddPolicy("CorsPolicy", corsBuilder =>
+    {
+        corsBuilder.SetIsOriginAllowed((string _) => true)
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
+    });
+});
 #region JWT
 
 // Add services to the container.
 var section = builder.Configuration.GetSection("TokenOptions"); // 获取TokenOptions配置
 var tokenOptions = section.Get<TokenOptions>();
-builder.Services.AddSingleton(new AppSettings(builder.Environment.ContentRootPath));
-builder.Services.AddTransient<IJwtService, JwtService>(); // 注册Jwt服务到容器
-builder.Services.Configure<TokenOptions>(section); // 注入IOptions需要这个
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+service.AddSingleton(new AppSettings(builder.Environment.ContentRootPath));
+
+service.AddTransient<IJwtService, JwtService>(); // 注册Jwt服务到容器
+service.Configure<TokenOptions>(section); // 注入IOptions需要这个
+service.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -55,13 +77,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 #endregion 
 #region Swagger
 
-builder.Services.AddDbContext<MasterDbContext>(option => option.UseSqlServer(AppSettings.App("Database:MSSQL")));
-builder.Services.AddTransient(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
-builder.Services.AddTransient(typeof(IMasterDbRepositoryBase<,>), typeof(MasterDbRepositoryBase<,>));
-
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddSingleton<IPrincipalAccessor, PrincipalAccessor>();
-builder.Services.AddSwaggerGen(s =>
+service.AddSwaggerGen(s =>
 {
     s.SwaggerDoc("v1",new() { Title="聊天WebApi",Version="v1",Description="token的聊天接口"});
     s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -83,18 +99,7 @@ builder.Services.AddSwaggerGen(s =>
                         } });
 });
 #endregion
-builder.Services.AddCors(delegate (CorsOptions options)
-{
-    options.AddPolicy("CorsPolicy", corsBuilder =>
-    {
-        corsBuilder.SetIsOriginAllowed((string _) => true)
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials();
-    });
-});
-builder.Services.AddControllers();
-builder.Services.AddControllers(o =>
+service.AddControllers(o =>
 {
     o.Filters.Add(typeof(GlobalExceptionsFilter));
     o.Filters.Add(typeof(GlobalResponseFilter));
@@ -104,7 +109,6 @@ builder.Services.AddControllers(o =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
     options.SerializerSettings.DateFormatString = Constants.DefaultTodayDateFormat;
 });
-builder.Services.AddEndpointsApiExplorer();
 
 
 #region 依赖注入
@@ -128,8 +132,6 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>//依赖注入
 
 var app = builder.Build();
 
-app.UseCors(Constants.CorsPolicy);
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -147,9 +149,9 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
+app.UseCors(Constants.CorsPolicy);
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
-app.Run();
+await app.RunAsync();

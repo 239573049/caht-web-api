@@ -26,6 +26,5 @@ public class MasterDbContext : DbContext
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(Expression.Lambda(body, parameter));
             }
         }
-        //DataInitialization.Initia(modelBuilder);
     }
 }

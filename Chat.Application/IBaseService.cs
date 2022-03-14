@@ -1,12 +1,10 @@
 ﻿using Chat.Core.Base;
 using Chat.Repository;
-using Chat.Repository.Core;
 using Chat.Repository.Repositorys;
+using Management.Repository.Core;
 using System.Linq.Expressions;
 
 namespace Chat.Application;
-
-
 public interface IBaseService<TEntity> where TEntity : Entity, new()
 {
     Task<TEntity?> FindAsync(Guid id);

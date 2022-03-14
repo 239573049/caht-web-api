@@ -1,10 +1,10 @@
-﻿using Chat.Core.Base;
+﻿using System.Linq.Expressions;
+using Chat.Core.Base;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace Chat.Repository.Core;
 
-public interface IEfRepository<TDbContext, TEntity, TKey> where TEntity : Entity<TKey> where TDbContext : DbContext
+public interface IRepository<TDbContext, TEntity, TKey> where TEntity : Entity<TKey> where TDbContext : DbContext
 {
     /// <summary>
     /// 根据id查询数据

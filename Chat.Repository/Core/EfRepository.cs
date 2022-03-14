@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Chat.Repository.Core;
 
-public abstract class EfRepository<TDbContext, TEntity, TKey> : IEfRepository<TDbContext, TEntity, TKey>
+public abstract class EfRepository<TDbContext, TEntity, TKey> : IRepository<TDbContext, TEntity, TKey>
     where TEntity : Entity<TKey>
     where TDbContext : DbContext
 {
@@ -53,7 +53,7 @@ public abstract class EfRepository<TDbContext, TEntity, TKey> : IEfRepository<TD
     }
     public virtual async Task DeleteMany(IList<TKey> idList)
     {
-        var entityList = await DbSet.Where(a => idList.Contains(a.Id!)).ToListAsync();
+        var entityList = await DbSet.Where(a => idList.Contains(a.Id)).ToListAsync();
         if (entityList == null) return;// throw new BusinessLogicException("the deleted objects do not exist");
         AttachIfNot(entityList);
         DbSet.RemoveRange(entityList);

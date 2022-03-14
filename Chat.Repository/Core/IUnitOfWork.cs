@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Chat.Repository.Core;
+namespace Management.Repository.Core;
 
 public interface IUnitOfWork<TDbContext> where TDbContext : DbContext
 {
