@@ -35,6 +35,12 @@ public interface IUserInfoService
     /// <param name="user"></param>
     /// <returns></returns>
     Task<UserInfoDto> UpdateUserInfo(UserInfoDto user);
+    /// <summary>
+    /// 获取账号信息（无隐私信息）
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<UserInfoDto> GetUserById(Guid id);
 }
 public class UserInfoService : BaseService<UserInfo>, IUserInfoService
 {
@@ -46,6 +52,18 @@ public class UserInfoService : BaseService<UserInfo>, IUserInfoService
         IMasterDbRepositoryBase<UserInfo> currentRepository) : base(unitOfWork, currentRepository)
     {
         _mapper = mapper;
+    }
+
+    public async Task<UserInfoDto> GetUserById(Guid id)
+    {
+        var data = await currentRepository.FindAll(a => a.Id == id)
+                .FirstOrDefaultAsync();
+        if (data == null) throw new BusinessLogicException("用户不存在或者已经被删除");
+        data.Password = "";
+        data.EMail = "";
+        data.Mobile =null;
+        data.WXOpenId = "";
+        return _mapper.Map<UserInfoDto>(data);
     }
 
     public async Task<UserInfoDto> GetUserInfo(Guid id)

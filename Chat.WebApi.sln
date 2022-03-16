@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32210.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.WebApi", "Chat.WebApi\Chat.WebApi.csproj", "{E282DF75-F230-4B05-A09D-278050FB65EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.WebApi", "Chat.WebApi\Chat.WebApi.csproj", "{E282DF75-F230-4B05-A09D-278050FB65EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Application", "Chat.Application\Chat.Application.csproj", "{6B94FACC-D793-40A8-8BCF-AECCB808A17E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Application", "Chat.Application\Chat.Application.csproj", "{6B94FACC-D793-40A8-8BCF-AECCB808A17E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Core", "Chat.Core\Chat.Core.csproj", "{3B4AFB06-7F3E-43DA-B9A1-DA189C185292}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Core", "Chat.Core\Chat.Core.csproj", "{3B4AFB06-7F3E-43DA-B9A1-DA189C185292}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Infrastructure", "Chat.Infrastructure\Chat.Infrastructure.csproj", "{90126901-C9C4-44AC-A8A7-93377E26777A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Infrastructure", "Chat.Infrastructure\Chat.Infrastructure.csproj", "{90126901-C9C4-44AC-A8A7-93377E26777A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Repository", "Chat.Repository\Chat.Repository.csproj", "{7FD5DFDC-4CAF-47F2-9019-43D4E87F1B13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Repository", "Chat.Repository\Chat.Repository.csproj", "{7FD5DFDC-4CAF-47F2-9019-43D4E87F1B13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.WebCore", "Chat.WebCore\Chat.WebCore.csproj", "{F15FE1CE-A9A4-4C2E-826F-AC127F35EAB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.WebCore", "Chat.WebCore\Chat.WebCore.csproj", "{F15FE1CE-A9A4-4C2E-826F-AC127F35EAB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Push", "Chat.Push\Chat.Push.csproj", "{D700EAE6-AE41-4CA5-89D4-A7F8594D6CE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{F15FE1CE-A9A4-4C2E-826F-AC127F35EAB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F15FE1CE-A9A4-4C2E-826F-AC127F35EAB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F15FE1CE-A9A4-4C2E-826F-AC127F35EAB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D700EAE6-AE41-4CA5-89D4-A7F8594D6CE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D700EAE6-AE41-4CA5-89D4-A7F8594D6CE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D700EAE6-AE41-4CA5-89D4-A7F8594D6CE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D700EAE6-AE41-4CA5-89D4-A7F8594D6CE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

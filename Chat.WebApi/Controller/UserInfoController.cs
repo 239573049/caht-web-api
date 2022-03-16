@@ -36,4 +36,14 @@ public class UserInfoController : WebApiController
     {
         return await _userInfoService.UpdateUserInfo(user);
     }
+    /// <summary>
+    /// 获取账号信息（无隐私信息）
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task<UserInfoDto> GetUserById(Guid id)
+    {
+        return await _userInfoService.GetUserById(id);
+    }
 }

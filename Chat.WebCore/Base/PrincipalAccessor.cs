@@ -1,5 +1,4 @@
 ﻿using Chat.Infrastructure.Exceptions;
-using Chat.WebCore.JWT;
 using Microsoft.AspNetCore.Http;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -34,11 +33,15 @@ public class PrincipalAccessor : IPrincipalAccessor
         string token = GetToken();
         return !string.IsNullOrEmpty(token) ? securityTokenHandler.ReadJwtToken(token).Claims.Where(item => item.Type == ClaimType).Select(item => item.Value).ToList() : new List<string>();
     }
-
+    public string GetUserId(string token)
+    {
+        JwtSecurityTokenHandler securityTokenHandler = new JwtSecurityTokenHandler();
+        return securityTokenHandler.ReadJwtToken(token).Claims.Where(item => item.Type == "user").Select(item => item.Value).FirstOrDefault()??"";
+    }
     public string? GetTenantId()
     {
         HttpContext httpContext = _contextAccessor.HttpContext;
-        return httpContext != null && httpContext.Request.Headers.ContainsKey(this.X_TENANT_ID) ? ((IEnumerable<string>)(object)httpContext.Request.Headers[this.X_TENANT_ID]).FirstOrDefault() : null;
+        return httpContext != null && httpContext.Request.Headers.ContainsKey(X_TENANT_ID) ? ((IEnumerable<string>)(object)httpContext.Request.Headers[this.X_TENANT_ID]).FirstOrDefault() : null;
     }
 
     public Guid UserId()

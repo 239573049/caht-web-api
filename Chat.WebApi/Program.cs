@@ -1,12 +1,13 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Chat.Infrastructure.Helper;
+using Chat.Push;
 using Chat.Repository;
-using Chat.Repository.Core;
 using Chat.Repository.Repositorys;
 using Chat.WebCore.Base;
 using Chat.WebCore.Filters;
 using Chat.WebCore.JWT;
+using CSRedis;
 using Management.Repository.Core;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -40,6 +41,10 @@ service.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 service.AddSingleton<IPrincipalAccessor, PrincipalAccessor>();
 service.AddEndpointsApiExplorer();
 service.AddAutoMapper(new List<Assembly> { Assembly.Load("Chat.Application") });
+service.AddSignalR();
+service.AddHubService();
+var csredis = new CSRedisClient(AppSettings.App("Redis:Connect"));
+RedisHelper.Initialization(csredis);
 
 service.AddCors(delegate (CorsOptions options)
 {
@@ -51,9 +56,9 @@ service.AddCors(delegate (CorsOptions options)
         .AllowCredentials();
     });
 });
+
 #region JWT
 
-// Add services to the container.
 var section = builder.Configuration.GetSection("TokenOptions"); // ªÒ»°TokenOptions≈‰÷√
 var tokenOptions = section.Get<TokenOptions>();
 service.AddSingleton(new AppSettings(builder.Environment.ContentRootPath));
@@ -75,6 +80,7 @@ service.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     };
                 });
 #endregion 
+
 #region Swagger
 
 service.AddSwaggerGen(s =>
@@ -144,14 +150,14 @@ if (app.Environment.IsDevelopment())
         c.DefaultModelsExpandDepth(-1);
     });
 }
-
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.UseCors(Constants.CorsPolicy);
-app.UseEndpoints(endpoints =>
+app.UseEndpoints(e =>
 {
-    endpoints.MapControllers();
+    e.MapControllers();
+    e.MapHub<ChatPush>("chatpush");
 });
 await app.RunAsync();

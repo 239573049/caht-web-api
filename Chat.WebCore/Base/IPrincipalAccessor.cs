@@ -10,7 +10,7 @@ namespace Chat.WebCore.Base;
 public interface IPrincipalAccessor
 {
     string Name { get; }
-
+    string GetUserId(string token);
     Guid ID { get; }
 
     bool? IsAuthenticated();

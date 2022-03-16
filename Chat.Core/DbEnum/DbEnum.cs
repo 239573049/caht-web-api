@@ -36,3 +36,21 @@ public enum StatueEnum
     [Description("禁用")]
     Forbidden
 }
+/// <summary>
+/// 好友申请状态
+/// </summary>
+public enum FriendStatueEnum
+{
+    /// <summary>
+    /// 申请中
+    /// </summary>
+    Applying,
+    /// <summary>
+    /// 成功
+    /// </summary>
+    Succeed,
+    /// <summary>
+    /// 拒绝
+    /// </summary>
+    Refuse
+}
