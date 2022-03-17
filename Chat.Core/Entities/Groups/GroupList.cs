@@ -1,5 +1,4 @@
 ﻿using Chat.Core.Base;
-using Chat.Core.Entities.User;
 
 namespace Chat.Core.Entities.Groups;
 
@@ -17,5 +16,5 @@ public class GroupList: EntityWithAllBaseProperty
     /// 
     /// </summary>
     public Guid GroupOwnerId { get; set; }
-    public UserInfo? GroupOwner { get; set; }
+    //public UserInfo? GroupOwner { get; set; }
 }

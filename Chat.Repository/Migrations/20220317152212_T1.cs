@@ -36,6 +36,7 @@ namespace Chat.Repository.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ConnectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BelongId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FriendsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -49,6 +50,27 @@ namespace Chat.Repository.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Chat_Friend", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Chat_GroupList",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GroupOwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chat_GroupList", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,33 +121,6 @@ namespace Chat.Repository.Migrations
                     table.PrimaryKey("PK_Chat_UserInfo", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Chat_GroupList",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    GroupOwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Chat_GroupList", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Chat_GroupList_Chat_UserInfo_GroupOwnerId",
-                        column: x => x.GroupOwnerId,
-                        principalTable: "Chat_UserInfo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Chat_ApplicationRecord_Id",
                 table: "Chat_ApplicationRecord",
@@ -135,11 +130,6 @@ namespace Chat.Repository.Migrations
                 name: "IX_Chat_Friend_Id",
                 table: "Chat_Friend",
                 column: "Id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Chat_GroupList_GroupOwnerId",
-                table: "Chat_GroupList",
-                column: "GroupOwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Chat_GroupList_Id",

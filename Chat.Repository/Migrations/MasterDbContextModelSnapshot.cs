@@ -77,6 +77,9 @@ namespace Chat.Repository.Migrations
                     b.Property<Guid>("BelongId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ConnectId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -145,8 +148,6 @@ namespace Chat.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GroupOwnerId");
 
                     b.HasIndex("Id");
 
@@ -259,28 +260,6 @@ namespace Chat.Repository.Migrations
                     b.HasIndex("Id");
 
                     b.ToTable("Chat_UserInfo", (string)null);
-                });
-
-            modelBuilder.Entity("Chat.Core.Entities.Groups.GroupList", b =>
-                {
-                    b.HasOne("Chat.Core.Entities.User.UserInfo", "GroupOwner")
-                        .WithMany()
-                        .HasForeignKey("GroupOwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GroupOwner");
-                });
-
-            modelBuilder.Entity("Chat.Core.Entities.Groups.GroupsListUserInfos", b =>
-                {
-                    b.HasOne("Chat.Core.Entities.Groups.GroupList", "GroupList")
-                        .WithMany()
-                        .HasForeignKey("GroupListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GroupList");
                 });
 #pragma warning restore 612, 618
         }

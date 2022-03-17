@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chat.Repository.Migrations
 {
     [DbContext(typeof(MasterDbContext))]
-    [Migration("20220315132000_T2")]
-    partial class T2
+    [Migration("20220317152212_T1")]
+    partial class T1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -77,6 +77,9 @@ namespace Chat.Repository.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("BelongId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ConnectId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CreatedBy")
@@ -148,8 +151,6 @@ namespace Chat.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupOwnerId");
-
                     b.HasIndex("Id");
 
                     b.ToTable("Chat_GroupList", (string)null);
@@ -191,8 +192,6 @@ namespace Chat.Repository.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Id");
-
-                    b.HasIndex("UserInfoId");
 
                     b.HasIndex("GroupListId", "UserInfoId");
 
@@ -263,36 +262,6 @@ namespace Chat.Repository.Migrations
                     b.HasIndex("Id");
 
                     b.ToTable("Chat_UserInfo", (string)null);
-                });
-
-            modelBuilder.Entity("Chat.Core.Entities.Groups.GroupList", b =>
-                {
-                    b.HasOne("Chat.Core.Entities.User.UserInfo", "GroupOwner")
-                        .WithMany()
-                        .HasForeignKey("GroupOwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GroupOwner");
-                });
-
-            modelBuilder.Entity("Chat.Core.Entities.Groups.GroupsListUserInfos", b =>
-                {
-                    b.HasOne("Chat.Core.Entities.Groups.GroupList", "GroupList")
-                        .WithMany()
-                        .HasForeignKey("GroupListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Chat.Core.Entities.User.UserInfo", "UserInfo")
-                        .WithMany()
-                        .HasForeignKey("UserInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GroupList");
-
-                    b.Navigation("UserInfo");
                 });
 #pragma warning restore 612, 618
         }

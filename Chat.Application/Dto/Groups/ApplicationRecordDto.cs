@@ -1,4 +1,5 @@
-﻿using Chat.Core.DbEnum;
+﻿using Chat.Application.Dto.User;
+using Chat.Core.DbEnum;
 
 namespace Chat.Application.Dto.Groups;
 
@@ -21,4 +22,5 @@ public class ApplicationRecordDto
     /// 申请状态
     /// </summary>
     public FriendStatueEnum FriendStatue { get; set; }
+    public UserInfoDto? AddInformation { get; set; }
 }
