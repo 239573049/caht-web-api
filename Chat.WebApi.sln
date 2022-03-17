@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Repository", "Chat.Rep
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.WebCore", "Chat.WebCore\Chat.WebCore.csproj", "{F15FE1CE-A9A4-4C2E-826F-AC127F35EAB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Push", "Chat.Push\Chat.Push.csproj", "{D700EAE6-AE41-4CA5-89D4-A7F8594D6CE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Push", "Chat.Push\Chat.Push.csproj", "{D700EAE6-AE41-4CA5-89D4-A7F8594D6CE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
