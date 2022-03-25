@@ -34,7 +34,6 @@ builder.Services.AddSingleton(Log.Logger);
 #endregion
 var service = builder.Services;
 service.AddSingleton(new AppSettings(builder.Environment.ContentRootPath));
-//service.AddDbContext<MasterDbContext>(option => option.UseMySql(AppSettings.App("Database:MYSQL"), new MySqlServerVersion(new Version(6, 0, 1))));
 service.AddDbContext<MasterDbContext>(option => option.UseSqlServer(AppSettings.App("Database:MSSQL")));
 service.AddTransient(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
 service.AddTransient(typeof(IMasterDbRepositoryBase<,>), typeof(MasterDbRepositoryBase<,>));

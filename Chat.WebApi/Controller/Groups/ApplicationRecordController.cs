@@ -1,7 +1,6 @@
 ﻿using Chat.Application.Dto.Chat;
 using Chat.Application.Dto.Groups;
 using Chat.Application.Services.Groups;
-using Chat.Core.Entities.Groups;
 using Chat.Infrastructure.Exceptions;
 using Chat.Push;
 using Chat.Push.PushService;
