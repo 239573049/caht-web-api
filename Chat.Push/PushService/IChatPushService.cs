@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Chat.Push.Pushs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Chat.Push.PushService;
 

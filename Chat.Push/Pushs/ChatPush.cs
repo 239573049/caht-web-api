@@ -2,7 +2,7 @@
 using Chat.WebCore.Base;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Chat.Push;
+namespace Chat.Push.Pushs;
 
 public class ChatPush:Hub
 {

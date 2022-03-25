@@ -2,6 +2,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Chat.Infrastructure.Helper;
 using Chat.Push;
+using Chat.Push.Pushs;
 using Chat.Repository;
 using Chat.Repository.Repositorys;
 using Chat.WebCore.Base;
@@ -159,5 +160,6 @@ app.UseEndpoints(e =>
 {
     e.MapControllers();
     e.MapHub<ChatPush>("chatpush");
+    e.MapHub<IotPush>("iotpush");
 });
 await app.RunAsync();
