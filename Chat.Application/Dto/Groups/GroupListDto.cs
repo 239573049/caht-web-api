@@ -4,7 +4,7 @@ namespace Chat.Application.Dto.Groups;
 
 public class GroupListDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// 群聊名称
